@@ -77,6 +77,24 @@ def show_shopping_cart():
     # Make sure your function can also handle the case wherein no cart has
     # been added to the session
 
+    cart = session["cart"]
+
+    in_cart = []
+
+    total_cost = 0
+
+    for melon_id in cart:
+        melon_object = melons.get_by_id(melon_id)
+        price = melon_object.price
+        quantity = cart[melon_id]
+        melon_total = price * quantity
+        total_cost += melon_total
+        melon_object.quantity = quantity
+        melon_object.melon_total = melon_total
+        in_cart.append(melon_object)
+
+    print "\n\n\nthis is your shopping cart from show shopping cart:", session["cart"], "\n\n\n"
+    print "in cart:" , in_cart
     return render_template("cart.html")
 
 
@@ -101,12 +119,12 @@ def add_to_cart(melon_id):
     melon = melons.get_by_id(melon_id).common_name
     if "cart" not in session:
         session["cart"] = {}
-    session["cart"].setdefault(melon_id, 1)
+    session["cart"].setdefault(melon_id, 0)
     session["cart"][melon_id] += 1
 
-        flash("{} successfully added to your cart".format(melon))
+    flash("{} successfully added to your cart".format(melon))
 
-    print session
+    # print "\n\n\nthis is your shopping cart:", session["cart"], "\n\n\n"
     return redirect("/cart")
 
 @app.route("/login", methods=["GET"])
