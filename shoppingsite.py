@@ -101,11 +101,8 @@ def add_to_cart(melon_id):
     melon = melons.get_by_id(melon_id).common_name
     if "cart" not in session:
         session["cart"] = {}
-    else:
-        if melon_id in session["cart"]:
-            session["cart"][melon_id] += 1
-        else:
-            session["cart"][melon_id] = 1
+    session["cart"].setdefault(melon_id, 1)
+    session["cart"][melon_id] += 1
 
         flash("{} successfully added to your cart".format(melon))
 
