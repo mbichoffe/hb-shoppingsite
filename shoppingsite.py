@@ -77,7 +77,7 @@ def show_shopping_cart():
     # Make sure your function can also handle the case wherein no cart has
     # been added to the session
 
-    cart = session["cart"]
+    cart = session.get("cart", {})
 
     in_cart = []
 
@@ -95,7 +95,9 @@ def show_shopping_cart():
 
     print "\n\n\nthis is your shopping cart from show shopping cart:", session["cart"], "\n\n\n"
     print "in cart:" , in_cart
-    return render_template("cart.html")
+    return render_template("cart.html",
+                            cart=in_cart,
+                            total_cost=total_cost,)
 
 
 @app.route("/add_to_cart/<melon_id>")
